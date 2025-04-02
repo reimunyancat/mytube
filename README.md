@@ -4,11 +4,12 @@
 /search -> search
 
 
-/users/edit -> edit user
+/users/:id -> see user
+/users/logout
+/users/edit -> see user
 /users/delete -> delete user
 
-/videos/watch -> watch video
-/videos/edit -> edit video
-/videos/delete -> delete video
-/videos/comments -> comment on a video
-/videos/comments/delete -> delete a comment of a video
+/videos/:id -> watch video
+/videos/:id/edit -> edit video
+/videos/:id/delete -> delete video
+/videos/upload
