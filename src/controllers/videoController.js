@@ -18,13 +18,17 @@ let videos = [
 ]
 
 
-export const trending = (req, res) => res.render("home", {pageTitle: "Home"})
+export const trending = (req, res) => res.render("home", {pageTitle: "Home", videos})
 export const watch = (req, res) => {
-    const { id } = req.parms;
+    const { id } = req.params;
     const video = videos[id-1];
-    return res.render("watch", { pageTitle: `Watching ${video.title}`, video});
+    return res.render("watch", { pageTitle: `Watching: ${video.title}`, video});
 }
-export const edit = (req, res) => res.send("edit")
+export const edit = (req, res) => {
+    const { id } = req.params;
+    const video = videos[id-1];
+    return res.render("edit", { pageTitle: `Editing: ${video.title}` })
+}
 export const search = (req, res) => res.send("search")
 export const upload = (req, res) => res.send("upload")
 export const deleteVideo = (req, res) => res.send("delete video")
