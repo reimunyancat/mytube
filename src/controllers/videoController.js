@@ -37,7 +37,6 @@ export const postEdit = async (req, res) => {
   return res.render("404", { pageTitle: "Video not found." });
 };
 export const search = (req, res) => res.send("search");
-export const deleteVideo = (req, res) => res.send("delete video");
 
 export const getUpload = (req, res) => {
   return res.render("upload", { pageTitle: "Upload Video" });
@@ -58,5 +57,11 @@ export const postUpload = async (req, res) => {
       errorMessage: error.message,
     });
   }
+  return res.redirect("/");
+};
+
+export const deleteVideo = async (req, res) => {
+  const { id } = req.params;
+  await Video.findByIdAndDelete(id);
   return res.redirect("/");
 };
