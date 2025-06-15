@@ -1,13 +1,8 @@
 import Video from "../models/Video";
 
 export const home = async (req, res) => {
-  try {
-    const videos = await Video.find({});
-    res.render("home", { pageTitle: "Home", videos });
-  } catch (error) {
-    console.log("errors", error);
-    res.render("home", { pageTitle: "Home", videos: [] });
-  }
+  const videos = await Video.find({}).sort({ createdAt: "desc" });
+  res.render("home", { pageTitle: "Home", videos });
 };
 export const watch = async (req, res) => {
   const { id } = req.params;
@@ -36,7 +31,6 @@ export const postEdit = async (req, res) => {
   }
   return res.render("404", { pageTitle: "Video not found." });
 };
-export const search = (req, res) => res.send("search");
 
 export const getUpload = (req, res) => {
   return res.render("upload", { pageTitle: "Upload Video" });
@@ -64,4 +58,10 @@ export const deleteVideo = async (req, res) => {
   const { id } = req.params;
   await Video.findByIdAndDelete(id);
   return res.redirect("/");
+};
+
+export const search = (req, res) => {
+  const { keyword } = req.query;
+  console.log(keyword);
+  return res.render("search", { pageTitle: "search" });
 };
