@@ -19,17 +19,36 @@ export const postJoin = async (req, res) => {
         : "This email is already registered.";
     return res.status(400).render("join", { pageTitle: "join", errorMessage });
   }
-  await User.create({
-    name,
-    username,
-    email,
-    password,
-    location,
-  });
+  try {
+    await User.create({
+      name,
+      username,
+      email,
+      password,
+      location,
+    });
+  } catch (error) {
+    return res.status(400).render("join", {
+      pageTitle: "join",
+      errorMessage: error.message,
+    });
+  }
   return res.redirect("/login");
+};
+export const getLogin = (req, res) =>
+  res.lender("login", { pageTitle: "Login" });
+export const postLogin = async (req, res) => {
+  const { username, password } = req.body;
+  const exists = await User.exists({ username });
+  if (exists)
+    return res
+      .status(400)
+      .render("login", {
+        pageTitle: "login",
+        errorMessage: "An account with this username does not exists.",
+      });
 };
 export const edit = (req, res) => res.send("edit");
 export const remove = (req, res) => res.send("remove");
-export const login = (req, res) => res.send("login");
 export const logout = (req, res) => res.send("logout");
 export const see = (req, res) => res.send("see");
