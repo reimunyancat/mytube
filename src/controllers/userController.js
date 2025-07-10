@@ -44,7 +44,11 @@ export const postLogin = async (req, res) => {
   const pageTitle = "login";
   if (user) {
     const ok = await bcrypt.compare(password, user.password);
-    if (ok) return res.redirect("/");
+    if (ok) {
+      req.session.loggedIn = true;
+      req.session.user = user;
+      return res.redirect("/");
+    }
     return res.status(400).render("login", {
       pageTitle,
       errorMessage: "Wrong Password",
