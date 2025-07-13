@@ -37,10 +37,10 @@ export const postJoin = async (req, res) => {
   return res.redirect("/login");
 };
 export const getLogin = (req, res) =>
-  res.lender("login", { pageTitle: "Login" });
+  res.render("login", { pageTitle: "Login" });
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
-  const user = User.findOne({ username });
+  const user = await User.findOne({ username });
   const pageTitle = "login";
   if (user) {
     const ok = await bcrypt.compare(password, user.password);

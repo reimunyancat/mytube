@@ -2,7 +2,7 @@ doctype html
 html(lang="ko")
     head
         link(rel="stylesheet" href="https://unpkg.com/mvp.css") 
-        title #{pageTitle} | Mytube
+        title #{pageTitle} | #{siteName}
     body
         header  
             h1=pageTitle
@@ -10,7 +10,12 @@ html(lang="ko")
                 ul 
                     li 
                         a(href="/") Home
-                    if !req.session.loggedIn
+                    if loggedIn
+                        li 
+                            a(href='/logout') Log Out
+                        li 
+                            a(href='/my-profile') #{loggedInUser.name}'s Profile
+                    else
                         li 
                             a(href='/join') Join
                         li 
