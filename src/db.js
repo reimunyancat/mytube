@@ -1,7 +1,10 @@
 import mongoose from "mongoose";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 mongoose
-  .connect("mongodb://127.0.0.1:27017/mytube")
+  .connect(process.env.DB_URL)
   .then(() => console.log("✅ Connected to MongoDB"))
   .catch((error) => console.log("❌ DB Error", error));
 
