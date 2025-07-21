@@ -7,14 +7,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/reimunyancat/wetube-reloaded.git"
+    "url": "git+https://github.com/reimunyancat/mytube.git"
   },
   "author": "reimunyancat",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/reimunyancat/wetube-reloaded/issues"
+    "url": "https://github.com/reimunyancat/mytube/issues"
   },
-  "homepage": "https://github.com/reimunyancat/wetube-reloaded#readme",
+  "homepage": "https://github.com/reimunyancat/mytube#readme",
   "dependencies": {
     "bcrypt": "^6.0.0",
     "connect-mongo": "^5.1.0",
