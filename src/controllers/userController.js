@@ -37,7 +37,10 @@ export const postJoin = async (req, res) => {
   return res.redirect("/login");
 };
 export const getLogin = (req, res) =>
-  res.render("login", { pageTitle: "Login" });
+  res.render("login", {
+    pageTitle: "Login",
+    githubClientId: process.env.GITHUB_CLIENT_ID,
+  });
 export const postLogin = async (req, res) => {
   const { username, password } = req.body;
   const user = await User.findOne({ username });
