@@ -62,6 +62,19 @@ export const postLogin = async (req, res) => {
     errorMessage: "An account with this username does not exist.",
   });
 };
+
+export const startGithubLogin = (req, res) => {
+  const baseURL = "https://github.com/login/oauth/authorize";
+  const config = {
+    client_id: process.env.GITHUB_CLIENT_ID,
+    scope: "read:user user:email",
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalURL = `${baseURL}?${params}`;
+  return res.redirect(finalURL);
+};
+
+export const finishGithubLogin = (req, res) => {};
 export const edit = (req, res) => res.send("edit");
 export const remove = (req, res) => res.send("remove");
 export const logout = (req, res) => res.send("logout");
