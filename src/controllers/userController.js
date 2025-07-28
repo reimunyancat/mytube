@@ -66,7 +66,7 @@ export const postLogin = async (req, res) => {
 export const startGithubLogin = (req, res) => {
   const baseURL = "https://github.com/login/oauth/authorize";
   const config = {
-    client_id: process.env.GITHUB_CLIENT_ID,
+    client_id: process.env.GH_CLIENT_ID,
     scope: "read:user user:email",
   };
   const params = new URLSearchParams(config).toString();
@@ -74,7 +74,35 @@ export const startGithubLogin = (req, res) => {
   return res.redirect(finalURL);
 };
 
-export const finishGithubLogin = (req, res) => {};
+export const finishGithubLogin = async (req, res) => {
+  const baseURL = "https://github.com/login/oauth/access_token";
+  const config = {
+    client_id: process.env.GH_CLIENT_ID,
+    client_secret: process.env.GH_CLIENT_SECRET,
+    code: req.query.code,
+  };
+  const params = new URLSearchParams(config).toString();
+  const finalURL = `${baseURL}?${params}`;
+
+  const tokenRequest = await (
+    await fetch(finalURL, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+      },
+    })
+  ).json();
+  if ("access_token" in tokenRequest) {
+    const { access_token } = tokenRequest;
+    const userRequest = await (
+      await fetch("https://api.github.com/user", {
+        headers: {
+          Authorization: `token ${access_token}`,
+        },
+      })
+    ).json();
+  }
+};
 export const edit = (req, res) => res.send("edit");
 export const remove = (req, res) => res.send("remove");
 export const logout = (req, res) => res.send("logout");
