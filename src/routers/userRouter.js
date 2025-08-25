@@ -8,13 +8,14 @@ import {
   getEdit,
   postEdit,
 } from "../controllers/userController";
+import { protector, redirectIfLoggedIn } from "../middlewares";
 
 const userRouter = express.Router();
 
-userRouter.get("/logout", logout);
-userRouter.route("/edit").get(getEdit).post(postEdit);
+userRouter.get("/logout", protector, logout);
+userRouter.route("/edit").all(protector).get(getEdit).post(postEdit);
 userRouter.get("/delete", remove);
-userRouter.get("/github/start", startGithubLogin);
+userRouter.get("/github/start", redirectIfLoggedIn, startGithubLogin);
 userRouter.get("/github/finish", finishGithubLogin);
 userRouter.get("/:id", see);
 
