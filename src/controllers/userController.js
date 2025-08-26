@@ -66,7 +66,7 @@ export const postLogin = async (req, res) => {
 export const startGithubLogin = (req, res) => {
   const baseURL = "https://github.com/login/oauth/authorize";
   const config = {
-    client_id: process.env.GH_CLIENT_ID,
+    client_id: process.env.GITHUB_CLIENT_ID,
     scope: "read:user user:email",
   };
   const params = new URLSearchParams(config).toString();
@@ -77,8 +77,8 @@ export const startGithubLogin = (req, res) => {
 export const finishGithubLogin = async (req, res) => {
   const baseURL = "https://github.com/login/oauth/access_token";
   const config = {
-    client_id: process.env.GH_CLIENT_ID,
-    client_secret: process.env.GH_CLIENT_SECRET,
+    client_id: process.env.GITHUB_CLIENT_ID,
+    client_secret: process.env.GITHUB_CLIENT_SECRET,
     code: req.query.code,
   };
   const params = new URLSearchParams(config).toString();
@@ -138,13 +138,45 @@ export const postEdit = async (req, res) => {
     },
     body: { name, email, username, location },
   } = req;
-  await User.findByIdAndUpdate(_id, {
-    name,
-    email,
-    username,
-    location,
+
+  // 중복 체크 (현재 사용자 제외)
+  const exists = await User.findOne({
+    $and: [
+      { _id: { $ne: _id } }, // 현재 사용자 제외
+      { $or: [{ username }, { email }] },
+    ],
   });
-  res.render("edit-profile");
+
+  if (exists) {
+    const errorMessage =
+      exists.username === username
+        ? "This username is already taken."
+        : "This email is already registered.";
+    return res.status(400).render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage,
+    });
+  }
+
+  try {
+    const updateUser = await User.findByIdAndUpdate(
+      _id,
+      {
+        name,
+        email,
+        username,
+        location,
+      },
+      { new: true }
+    );
+    req.session.user = updateUser;
+    return res.redirect("/users/edit");
+  } catch (error) {
+    return res.status(400).render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: error.message,
+    });
+  }
 };
 export const remove = (req, res) => res.send("remove");
 export const logout = (req, res) => {
