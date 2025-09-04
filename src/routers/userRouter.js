@@ -7,6 +7,7 @@ import {
   see,
   getEdit,
   postEdit,
+  postChangePassword,
 } from "../controllers/userController";
 import { protector, redirectIfLoggedIn } from "../middlewares";
 
@@ -14,6 +15,7 @@ const userRouter = express.Router();
 
 userRouter.get("/logout", protector, logout);
 userRouter.route("/edit").all(protector).get(getEdit).post(postEdit);
+userRouter.post("/change-password", protector, postChangePassword);
 userRouter.get("/delete", remove);
 userRouter.get("/github/start", redirectIfLoggedIn, startGithubLogin);
 userRouter.get("/github/finish", finishGithubLogin);

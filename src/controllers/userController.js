@@ -131,6 +131,36 @@ export const finishGithubLogin = async (req, res) => {
 };
 export const getEdit = (req, res) =>
   res.render("edit-profile", { pageTitle: "Edit Profile" });
+
+export const postChangePassword = async (req, res) => {
+  const {
+    session: {
+      user: { _id },
+    },
+    body: { oldPassword, newPassword, newPasswordConfirmation },
+  } = req;
+
+  if (newPassword !== newPasswordConfirmation) {
+    return res.status(400).render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "Password confirmation does not match.",
+    });
+  }
+
+  const user = await User.findById(_id);
+  const ok = await bcrypt.compare(oldPassword, user.password);
+
+  if (!ok) {
+    return res.status(400).render("edit-profile", {
+      pageTitle: "Edit Profile",
+      errorMessage: "The current password is incorrect.",
+    });
+  }
+
+  user.password = newPassword;
+  await user.save();
+  return res.redirect("/users/edit");
+};
 export const postEdit = async (req, res) => {
   const {
     session: {
@@ -139,12 +169,8 @@ export const postEdit = async (req, res) => {
     body: { name, email, username, location },
   } = req;
 
-  // 중복 체크 (현재 사용자 제외)
   const exists = await User.findOne({
-    $and: [
-      { _id: { $ne: _id } }, // 현재 사용자 제외
-      { $or: [{ username }, { email }] },
-    ],
+    $and: [{ _id: { $ne: _id } }, { $or: [{ username }, { email }] }],
   });
 
   if (exists) {
@@ -177,6 +203,9 @@ export const postEdit = async (req, res) => {
       errorMessage: error.message,
     });
   }
+};
+export const getChangePassword = (req, res) => {
+  res.render("change-password", { pageTitle: "Change Password" });
 };
 export const remove = (req, res) => res.send("remove");
 export const logout = (req, res) => {
