@@ -1,22 +1,29 @@
 import Video from "../models/Video";
 
 export const home = async (req, res) => {
-  const videos = await Video.find({}).sort({ createdAt: "desc" });
-  res.render("home", { pageTitle: "Home", videos });
+  const videos = await Video.find({});
+  res.render("videos/home", { pageTitle: "Home", videos });
 };
+
 export const watch = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
-  if (video) return res.render("watch", { pageTitle: video.title, video });
+  if (video)
+    return res.render("videos/watch", { pageTitle: video.title, video });
   return res.status(404).render("404", { pageTitle: "Video not found." });
 };
+
 export const getEdit = async (req, res) => {
   const { id } = req.params;
   const video = await Video.findById(id);
   if (video)
-    return res.render("edit", { pageTitle: `Edit: ${video.title}`, video });
+    return res.render("videos/edit", {
+      pageTitle: `Edit: ${video.title}`,
+      video,
+    });
   return res.status(404).render("404", { pageTitle: "Video not found." });
 };
+
 export const postEdit = async (req, res) => {
   const { id } = req.params;
   const { title, description, hashtags } = req.body;
@@ -33,7 +40,7 @@ export const postEdit = async (req, res) => {
 };
 
 export const getUpload = (req, res) => {
-  return res.render("upload", { pageTitle: "Upload Video" });
+  return res.render("videos/upload", { pageTitle: "Upload Video" });
 };
 
 export const postUpload = async (req, res) => {
@@ -46,7 +53,7 @@ export const postUpload = async (req, res) => {
     });
   } catch (error) {
     console.log("video upload error", error);
-    return res.status(400).render("upload", {
+    return res.status(400).render("videos/upload", {
       pageTitle: "Upload Video",
       errorMessage: error.message,
     });
@@ -71,5 +78,5 @@ export const search = async (req, res) => {
       },
     });
   }
-  return res.render("search", { pageTitle: "search", videos });
+  return res.render("videos/search", { pageTitle: "search", videos });
 };

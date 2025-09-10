@@ -2,12 +2,12 @@ import User from "../models/User";
 import bcrypt from "bcrypt";
 
 export const getJoin = (req, res) => {
-  res.render("join", { pageTitle: "join" });
+  res.render("users/join", { pageTitle: "join" });
 };
 export const postJoin = async (req, res) => {
   const { name, username, email, password, password2, location } = req.body;
   if (password !== password2) {
-    return res.status(400).render("join", {
+    return res.status(400).render("users/join", {
       pageTitle: "join",
       errorMessage: "Password confirmation does not match.",
     });
@@ -18,7 +18,9 @@ export const postJoin = async (req, res) => {
       exists.username === username
         ? "This username is already taken."
         : "This email is already registered.";
-    return res.status(400).render("join", { pageTitle: "join", errorMessage });
+    return res
+      .status(400)
+      .render("users/join", { pageTitle: "join", errorMessage });
   }
   try {
     await User.create({
@@ -29,7 +31,7 @@ export const postJoin = async (req, res) => {
       location,
     });
   } catch (error) {
-    return res.status(400).render("join", {
+    return res.status(400).render("users/join", {
       pageTitle: "join",
       errorMessage: error.message,
     });
@@ -37,7 +39,7 @@ export const postJoin = async (req, res) => {
   return res.redirect("/login");
 };
 export const getLogin = (req, res) =>
-  res.render("login", {
+  res.render("users/login", {
     pageTitle: "Login",
     githubClientId: process.env.GITHUB_CLIENT_ID,
   });
@@ -52,12 +54,12 @@ export const postLogin = async (req, res) => {
       req.session.user = user;
       return res.redirect("/");
     }
-    return res.status(400).render("login", {
+    return res.status(400).render("users/login", {
       pageTitle,
       errorMessage: "Wrong Password",
     });
   }
-  return res.status(400).render("login", {
+  return res.status(400).render("users/login", {
     pageTitle,
     errorMessage: "An account with this username does not exist.",
   });
@@ -130,7 +132,7 @@ export const finishGithubLogin = async (req, res) => {
   } else return res.redirect("/login");
 };
 export const getEdit = (req, res) =>
-  res.render("edit-profile", { pageTitle: "Edit Profile" });
+  res.render("users/edit-profile", { pageTitle: "Edit Profile" });
 
 export const postChangePassword = async (req, res) => {
   const {
@@ -141,7 +143,7 @@ export const postChangePassword = async (req, res) => {
   } = req;
 
   if (newPassword !== newPasswordConfirmation) {
-    return res.status(400).render("edit-profile", {
+    return res.status(400).render("users/edit-profile", {
       pageTitle: "Edit Profile",
       errorMessage: "Password confirmation does not match.",
     });
@@ -151,7 +153,7 @@ export const postChangePassword = async (req, res) => {
   const ok = await bcrypt.compare(oldPassword, user.password);
 
   if (!ok) {
-    return res.status(400).render("edit-profile", {
+    return res.status(400).render("users/edit-profile", {
       pageTitle: "Edit Profile",
       errorMessage: "The current password is incorrect.",
     });
@@ -178,7 +180,7 @@ export const postEdit = async (req, res) => {
       exists.username === username
         ? "This username is already taken."
         : "This email is already registered.";
-    return res.status(400).render("edit-profile", {
+    return res.status(400).render("users/edit-profile", {
       pageTitle: "Edit Profile",
       errorMessage,
     });
@@ -198,7 +200,7 @@ export const postEdit = async (req, res) => {
     req.session.user = updateUser;
     return res.redirect("/users/edit");
   } catch (error) {
-    return res.status(400).render("edit-profile", {
+    return res.status(400).render("users/edit-profile", {
       pageTitle: "Edit Profile",
       errorMessage: error.message,
     });
