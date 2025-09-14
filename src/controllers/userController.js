@@ -163,6 +163,7 @@ export const postChangePassword = async (req, res) => {
   await user.save();
   return res.redirect("/users/edit");
 };
+
 export const postEdit = async (req, res) => {
   const {
     session: {
