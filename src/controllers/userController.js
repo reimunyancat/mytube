@@ -167,9 +167,10 @@ export const postChangePassword = async (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id },
+      user: { _id, avatarUrl },
     },
     body: { name, email, username, location },
+    file,
   } = req;
 
   const exists = await User.findOne({
@@ -191,6 +192,7 @@ export const postEdit = async (req, res) => {
     const updateUser = await User.findByIdAndUpdate(
       _id,
       {
+        avatarUrl: file ? file.path : avatarUrl,
         name,
         email,
         username,
