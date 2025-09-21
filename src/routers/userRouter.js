@@ -12,7 +12,7 @@ import {
 import {
   protector,
   redirectIfLoggedIn,
-  uploadMiddleware,
+  uploadProfileImage,
 } from "../middlewares";
 
 const userRouter = express.Router();
@@ -22,7 +22,7 @@ userRouter
   .route("/edit")
   .all(protector)
   .get(getEdit)
-  .post(uploadMiddleware.single("avatar"), postEdit);
+  .post(uploadProfileImage.single("profileimg"), postEdit);
 userRouter.post("/change-password", protector, postChangePassword);
 userRouter.get("/delete", remove);
 userRouter.get("/github/start", redirectIfLoggedIn, startGithubLogin);

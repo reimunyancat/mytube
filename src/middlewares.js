@@ -18,4 +18,5 @@ export const redirectIfLoggedIn = (req, res, next) => {
   else return res.redirect("/");
 };
 
-export const uploadMiddleware = multer({ dest: "upload/" });
+export const uploadProfileImage = multer({ dest: "uploads/profile-img/" });
+export const uploadVideo = multer({ dest: "uploads/videos/" });

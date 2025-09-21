@@ -167,7 +167,7 @@ export const postChangePassword = async (req, res) => {
 export const postEdit = async (req, res) => {
   const {
     session: {
-      user: { _id, avatarUrl },
+      user: { _id, profileimgUrl },
     },
     body: { name, email, username, location },
     file,
@@ -192,7 +192,7 @@ export const postEdit = async (req, res) => {
     const updateUser = await User.findByIdAndUpdate(
       _id,
       {
-        avatarUrl: file ? file.path : avatarUrl,
+        profileimgUrl: file ? file.path : profileimgUrl,
         name,
         email,
         username,
