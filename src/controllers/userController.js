@@ -215,6 +215,15 @@ export const getChangePassword = (req, res) => {
 export const remove = (req, res) => res.send("remove");
 export const logout = (req, res) => {
   req.session.destroy();
+
   return res.redirect("/");
 };
-export const see = (req, res) => res.send("see");
+export const see = async (req, res) => {
+  const { id } = req.params;
+  const user = await User.findById(id);
+
+  if (!user) {
+    return res.status(404).render("404", { pageTitle: "User not found" });
+  }
+  return res.render("users/profile", { pageTitle: `${user.name}`, user });
+};
