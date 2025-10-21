@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema({
   profileimgUrl: { type: String },
   location: { type: String },
   social: { type: Boolean },
+  Videos: [{ type: mongoose.Schema.Types.ObjectId, ref: "Video" }],
 });
 
 userSchema.pre("save", async function () {
