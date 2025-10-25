@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   entry: "./src/client/js/main.js",
   output: {
     filename: "main.js",
