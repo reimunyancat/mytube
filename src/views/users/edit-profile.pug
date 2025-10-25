@@ -7,7 +7,6 @@ block content
     form(action="/users/edit", method="post", enctype="multipart/form-data")
         label(for="profileimg") Profile Image
         input(type="file", id="profileimg", name="profileimg", accept="image/*")
-        input(placeholder="Name", name="name", type="text", required, value=loggedInUser.name)
         input(placeholder="Email", name="email", type="email", required, value=loggedInUser.email)
         input(placeholder="Username", name="username", type="text", required, value=loggedInUser.username)
         input(placeholder="Location", name="location", type="text", value=loggedInUser.location)

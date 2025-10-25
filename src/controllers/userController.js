@@ -6,7 +6,7 @@ export const getJoin = (req, res) => {
   res.render("users/join", { pageTitle: "join" });
 };
 export const postJoin = async (req, res) => {
-  const { name, username, email, password, password2, location } = req.body;
+  const { username, email, password, password2, location } = req.body;
   if (password !== password2) {
     return res.status(400).render("users/join", {
       pageTitle: "join",
@@ -25,7 +25,6 @@ export const postJoin = async (req, res) => {
   }
   try {
     await User.create({
-      name,
       username,
       email,
       password,
@@ -119,7 +118,6 @@ export const finishGithubLogin = async (req, res) => {
     let user = await User.findOne({ email: emailObj.email });
     if (!user) {
       user = await User.create({
-        name: userData.name,
         username: userData.login,
         email: emailObj.email,
         password: "",
@@ -170,7 +168,7 @@ export const postEdit = async (req, res) => {
     session: {
       user: { _id, profileimgUrl },
     },
-    body: { name, email, username, location },
+    body: { email, username, location },
     file,
   } = req;
 
@@ -194,7 +192,6 @@ export const postEdit = async (req, res) => {
       _id,
       {
         profileimgUrl: file ? file.path : profileimgUrl,
-        name,
         email,
         username,
         location,
@@ -228,7 +225,7 @@ export const see = async (req, res) => {
   }
   const videos = await Video.find({ owner: user.id });
   return res.render("users/profile", {
-    pageTitle: `${user.name}`,
+    pageTitle: user.username,
     user,
     videos,
   });

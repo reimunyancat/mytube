@@ -3,8 +3,8 @@ extends ../base
 block content
     if errorMessage
         span=errorMessage
-    form(method="post")
-        label(for="video", enctype="multipart/form-data") Video File
+    form(method="post", enctype="multipart/form-data")
+        label(for="video") Video File
         input(type="file", accept="video/*", required, id="video", name="video")
         input(placeholder="Title", required, type="text", name="title", maxLength=100)
         input(placeholder="Description", required, type="text", name="description")
